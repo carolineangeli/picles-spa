@@ -23,5 +23,5 @@ export function Button({ variant = ButtonVariant.Default, children, ...rest }: I
     break
   }
 
-  return <button className={styles.buttonBase}{...rest}>{children}</button>
+  return <button className={buttonClass}{...rest}>{children}</button>
 }
