@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import styles from './Card.module.css';
-import thumbDefault from '../../../assets/thumb-default.jpg'
+import { ImageBase64 } from '../ImageBase64/ImageBase64';
+
 
 interface ICard {
     href: string;
@@ -11,7 +12,7 @@ interface ICard {
 export function Card({ href, thumb, text }: ICard) {
     return (
         <Link to={href} className={styles.card}>
-            <img src={thumb} onError={(e) => e.currentTarget.src = thumbDefault} />
+            <ImageBase64 src={thumb} />
             <span>{text}</span>
         </Link>
     );
