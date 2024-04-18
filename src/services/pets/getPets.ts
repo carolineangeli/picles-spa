@@ -1,13 +1,15 @@
+import { GetPetsRequest, GetPetsResponse } from '../../interfaces/pet';
 import httpClient from '../api/httpClient'
 
-export async function getPets() {
+export async function getPets(
+    params?: GetPetsRequest
+): Promise<GetPetsResponse> {
     try {
-        const response = await httpClient.get('/pets')
+        const response = await httpClient.get('/pets', {params})
         return response.data
     } catch (error) {
         console.log('erro ao buscar pets', error);
         throw error
     }
-
 
 }
