@@ -1,21 +1,56 @@
-import { Card } from '../../components/common/Card';
-import { Header } from '../../components/common/Header';
-import { Grid } from '../../components/layout/Grid';
-import styles from './Pets.module.css';
-import { Skeleton } from '../../components/common/Skeleton';
+import { Card } from "../../components/common/Card/Card";
+import { Header } from "../../components/common/Header";
+import { Skeleton } from "../../components/common/Skeleton";
+import { Grid } from "../../components/layout/Grid";
+import styles from "./Pets.module.css";
+import { Pagination } from "../../components/common/Pagination";
+import { useSearchParams } from "react-router-dom";
+import { UsePetList } from "../../hooks/usePetList";
 
-export function Pets() {
-    return (
-        <Grid>
-            <div className={styles.container}>
-                <Header />
-                <main className={styles.list}>
-                    <Skeleton count={5} containerClassName={styles.skeleton} />
-                    <Card href="/pets/1" text="nina" thumb="" />
-                    <Card href="/pets/2" text="bob" thumb="" />
-                    <Card href="/pets/3" text="jão" thumb="" />
-                </main>
-            </div>
-        </Grid>
-    );
-}
+export const Pets = () => {
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const { data, isLoading } = UsePetList({
+    page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
+  })
+
+
+  function changePage(page: number) {
+    setSearchParams((params) => {
+      params.set('page', String(page))
+      return params
+    })
+  }
+  return (
+    <>
+      <Grid>
+        <div className={styles.container}>
+          <Header />
+          {isLoading && (
+            <Skeleton count={5} containerClassName={styles.skeleton} />
+          )}
+          <main className={styles.list}>
+            {data?.items.map((item, index) => (
+              <Card
+                key={index}
+                href={`/pets/${item.id}`}
+                text={item.name}
+                thumb={item.photo}
+              />
+            ))}
+          </main>
+          {
+            data?.currentPage && (
+              <Pagination
+              currentPage={data.currentPage}
+              totalPages={data.totalPages}
+              onPageChange={(number) => {
+                changePage(number);
+              }}
+              />
+            )}
+        </div>
+      </Grid>
+    </>
+  );
+};
