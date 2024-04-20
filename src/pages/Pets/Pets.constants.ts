@@ -54,11 +54,11 @@ interface IFilterColumns {
           text: 'Todos',
         },
         {
-          value: 'female',
+          value: 'Female',
           text: 'Fêmea',
         },
         {
-          value: 'male',
+          value: 'Male',
           text: 'Macho',
         },
       ],
