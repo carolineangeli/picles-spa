@@ -14,11 +14,11 @@ interface IFilterColumns {
           text: 'Todos',
         },
         {
-          value: 'cachorro',
+          value: 'Dogs',
           text: 'Cachorros',
         },
         {
-          value: 'gato',
+          value: 'Cats',
           text: 'Gatos',
         },
       ],
@@ -32,15 +32,15 @@ interface IFilterColumns {
           text: 'Todos',
         },
         {
-          value: 'pequeno',
+          value: 'small',
           text: 'Pequeno',
         },
         {
-          value: 'medio',
+          value: 'Medium',
           text: 'Médio',
         },
         {
-          value: 'grande',
+          value: 'big',
           text: 'Grande',
         },
       ],
@@ -54,11 +54,11 @@ interface IFilterColumns {
           text: 'Todos',
         },
         {
-          value: 'femea',
+          value: 'female',
           text: 'Fêmea',
         },
         {
-          value: 'macho',
+          value: 'male',
           text: 'Macho',
         },
       ],

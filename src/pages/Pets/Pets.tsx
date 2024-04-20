@@ -41,7 +41,7 @@ export function Pets() {
               <div key={filter.name} className={styles.column}>
                 <Select 
                   label={filter.title}
-                  defaultValue=""
+                  defaultValue={urlParams[filter.name]}
                   name={filter.name}
                   options={filter.options}/>
               </div>
