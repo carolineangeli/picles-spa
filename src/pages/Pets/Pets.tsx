@@ -15,16 +15,12 @@ export function Pets() {
 
   const urlParams = {
     page: searchParams.get('page') ? Number(searchParams.get('page')) : 1,
+    type: searchParams.get('type') ?? '',
+    size: searchParams.get('size') ?? '',
+    gender: searchParams.get('gender') ?? '',
   }
 
   const { data, isLoading } =  usePetList(urlParams)
-
-  // Example of useQuery:
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ['get-pets', urlParams],
-  //   queryFn: () => getPets(urlParams),
-  //   // staleTime: 100 //Defines time to next request
-  // });
 
   function changePage(page: number) {
     // Update the param page from url
