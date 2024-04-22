@@ -32,7 +32,7 @@ interface IFilterColumns {
           text: 'Todos',
         },
         {
-          value: 'small',
+          value: 'Small',
           text: 'Pequeno',
         },
         {
@@ -40,7 +40,7 @@ interface IFilterColumns {
           text: 'Médio',
         },
         {
-          value: 'big',
+          value: 'Big',
           text: 'Grande',
         },
       ],

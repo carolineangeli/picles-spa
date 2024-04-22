@@ -7,10 +7,13 @@ import { Grid } from '../../components/layout/Grid';
 import { usePetList } from '../../hooks/usePetList';
 import styles from './Pets.module.css';
 import { Select } from '../../components/common/Select';
-import { Button } from '../../components/common/Button';
+import { Button, ButtonVariant } from '../../components/common/Button';
 import { filterColumns } from './Pets.constants';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { GetPetsRequest } from '../../interfaces/pet';
 
 export function Pets() {
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false)
   const [searchParams, setSearchParams] = useSearchParams()
 
   const urlParams = {
@@ -22,6 +25,23 @@ export function Pets() {
 
   const { data, isLoading } =  usePetList(urlParams)
 
+  function checkButtonStatus (event: ChangeEvent<HTMLFormElement>){
+    const { type, size, gender } = getFormValue(event.target.form)
+
+    if (type !== urlParams.type || size !== urlParams.size || gender !== urlParams.gender){
+      setIsButtonEnabled(true)
+    } else {
+      setIsButtonEnabled(false)
+    }
+  }
+
+  // Example of useQuery:
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ['get-pets', urlParams],
+  //   queryFn: () => getPets(urlParams),
+  //   // staleTime: 100 //Defines time to next request
+  // });
+
   function changePage(page: number) {
     // Update the param page from url
     setSearchParams((params) => {
@@ -30,16 +50,44 @@ export function Pets() {
     })
   }
 
+  function getFormValue(form: HTMLFormElement) {
+    const formData = new FormData(form)
+    return Object.fromEntries(formData)
+  }
+
+  function updateSearchParams(urlParams: GetPetsRequest) {
+    const fields: (keyof GetPetsRequest)[] = ['type', 'size', 'gender']
+    const newParams = new URLSearchParams()
+
+    fields.forEach((field) => {
+      if (urlParams[field]) {
+        newParams.set(field, String(urlParams[field]))
+      }
+    })
+    newParams.set('page', '1')
+
+    return newParams
+  }
+
+  function applyFilters(event: FormEvent) {
+    event.preventDefault()
+
+    const formValues = getFormValue(event.target as HTMLFormElement)
+    const newSearchParams = updateSearchParams(formValues)
+
+    setSearchParams(newSearchParams)
+  }
+
   return (
     <Grid>
       <div className={styles.container}>
         <Header />
 
-        <form className={styles.filters}>
+        <form className={styles.filters} onSubmit={applyFilters} onChange={checkButtonStatus}>
           <div className={styles.columns}>
             {filterColumns.map((filter) => (
               <div key={filter.name} className={styles.column}>
-                <Select 
+                <Select
                   label={filter.title}
                   defaultValue={urlParams[filter.name]}
                   name={filter.name}
@@ -47,7 +95,7 @@ export function Pets() {
               </div>
             ))}
           </div>
-          <Button type="submit">Buscar</Button>
+          <Button type="submit" variant={ isButtonEnabled ? ButtonVariant.Default : ButtonVariant.Disabled }>Buscar</Button>
         </form>
 
         {isLoading && <Skeleton containerClassName={styles.skeleton} count={10} />}
