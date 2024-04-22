@@ -76,6 +76,7 @@ export function Pets() {
     const newSearchParams = updateSearchParams(formValues)
 
     setSearchParams(newSearchParams)
+    setIsButtonEnabled(false)
   }
 
   return (
