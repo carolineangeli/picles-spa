@@ -35,12 +35,6 @@ export function Pets() {
     }
   }
 
-  // Example of useQuery:
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ['get-pets', urlParams],
-  //   queryFn: () => getPets(urlParams),
-  //   // staleTime: 100 //Defines time to next request
-  // });
 
   function changePage(page: number) {
     // Update the param page from url
