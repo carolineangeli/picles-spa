@@ -1,5 +1,8 @@
+import { Input } from "../../../components/common/Input"
 import { Panel } from "../../../components/layout/Panel"
 
 export function Shelter(){
-    return <Panel>Formulario de abrigo</Panel>
+    return <Panel>
+        <Input label="Nome" />
+        </Panel>
 }
