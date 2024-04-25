@@ -1,10 +1,11 @@
-import { createBrowserRouter } from 'react-router-dom';
-import { Home } from './pages/Home';
-import { Pets } from './pages/Pets';
-import { PetDetails } from './pages/PetDetails/PetDetails';
-import { PetList } from './pages/Admin/PetList';
-import { Shelter } from './pages/Admin/Shelter';
-import { AuthHOC } from './components/common/AuthHOC/AuthHOC';
+import { createBrowserRouter } from 'react-router-dom'
+import { Home } from './pages/Home'
+import { Pets } from './pages/Pets'
+import { PetDetails } from './pages/PetDetails'
+import { Shelter } from './pages/Admin/Shelter'
+import { PetList } from './pages/Admin/PetList'
+import { AuthHOC } from './components/common/AuthHOC/AuthHOC'
+import { PetForm } from './pages/Admin/PetForm/PetForm'
 
 const router = createBrowserRouter([
   {
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
       {
         path: '/pets/:id',
         element: <PetDetails />,
-      }
+      },
     ],
   },
   {
@@ -39,10 +40,18 @@ const router = createBrowserRouter([
             index: true,
             element: <PetList />,
           },
+          {
+            path: '/admin/pets/new',
+            element: <PetForm />,
+          },
+          {
+            path: '/admin/pets/:id',
+            element: <PetForm />,
+          },
         ],
       },
     ],
   },
-]);
+])
 
-export default router;
+export default router
