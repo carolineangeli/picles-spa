@@ -10,8 +10,14 @@ import { useHookFormMask } from 'use-mask-input';
 const shelterSchema = z.object({
   name: z.string().min(2, 'Nome deve ter no mínimo 2 caracteres.').max(30, 'Nome deve ter no máximo 30 caracteres.'),
   email: z.string().email('Campo deve ser um email'),
-  phone: z.string(),
-  whatsApp: z.string(),
+  phone: z.string().refine((value) => {
+    const digits = value.replace(/\D/g, '').length
+    return digits >= 10 && digits <= 11
+  }, {message: 'Numero deve ser entre 10 e 11 caracteres'}),
+  whatsApp: z.string().refine((value) => {
+    const digits = value.replace(/\D/g, '').length
+    return digits >= 10 && digits <= 11
+  }, {message: 'Numero deve ser entre 10 e 11 caracteres'}),
 });
 
 type ShelterSchema = z.infer<typeof shelterSchema>;
@@ -23,8 +29,8 @@ export function Shelter() {
 
   const registerWithMask = useHookFormMask(register)
 
-  function submit({ name }: ShelterSchema) {
-    console.log(name);
+  function submit({ name, email, phone, whatsApp }: ShelterSchema) {
+    console.log(name, email, phone, whatsApp);
   }
 
   return (
@@ -39,11 +45,11 @@ export function Shelter() {
           {formState.errors?.email && <p className={styles.formError}>{formState.errors.email.message}</p>}
         </div>
         <div>
-          <Input label="Telefone" {...registerWithMask('phone', ['99 9999-9999','99 9 9999-9999'])} />
+          <Input label="Telefone" {...registerWithMask('phone', ['99 9999-9999', '99 99999-9999'])} />
           {formState.errors?.phone && <p className={styles.formError}>{formState.errors.phone.message}</p>}
         </div>
         <div>
-          <Input label="WhatsApp" {...registerWithMask('whatsApp', ['99 9999-9999', '99 9 9999-9999'])} />
+          <Input label="WhatsApp" {...registerWithMask('whatsApp', ['99 99999-9999', '99 9999-9999'])} />
           {formState.errors?.whatsApp && <p className={styles.formError}>{formState.errors.whatsApp.message}</p>}
         </div>
 
@@ -52,3 +58,4 @@ export function Shelter() {
     </Panel>
   );
 }
+
