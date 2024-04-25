@@ -5,6 +5,7 @@ import { Panel } from '../../../components/layout/Panel';
 import styles from './Shelter.module.css';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useHookFormMask } from 'use-mask-input';
 
 const shelterSchema = z.object({
   name: z.string().min(2, 'Nome deve ter no mínimo 2 caracteres.').max(30, 'Nome deve ter no máximo 30 caracteres.'),
@@ -19,6 +20,8 @@ export function Shelter() {
   const { handleSubmit, register, formState } = useForm<ShelterSchema>({
     resolver: zodResolver(shelterSchema),
   });
+
+  const registerWithMask = useHookFormMask(register)
 
   function submit({ name }: ShelterSchema) {
     console.log(name);
@@ -36,11 +39,11 @@ export function Shelter() {
           {formState.errors?.email && <p className={styles.formError}>{formState.errors.email.message}</p>}
         </div>
         <div>
-          <Input label="Telefone" {...register('phone')} />
+          <Input label="Telefone" {...registerWithMask('phone', ['99 9999-9999','99 9 9999-9999'])} />
           {formState.errors?.phone && <p className={styles.formError}>{formState.errors.phone.message}</p>}
         </div>
         <div>
-          <Input label="WhatsApp" {...register('whatsApp')} />
+          <Input label="WhatsApp" {...registerWithMask('whatsApp', ['99 9999-9999', '99 9 9999-9999'])} />
           {formState.errors?.whatsApp && <p className={styles.formError}>{formState.errors.whatsApp.message}</p>}
         </div>
 
