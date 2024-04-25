@@ -6,6 +6,8 @@ import styles from './Shelter.module.css';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useHookFormMask } from 'use-mask-input';
+import { Toaster, toast } from 'sonner';
+import { updateShelter } from '../../../services/shelter/updateShelter';
 
 const shelterSchema = z.object({
   name: z.string().min(2, 'Nome deve ter no mínimo 2 caracteres.').max(30, 'Nome deve ter no máximo 30 caracteres.'),
@@ -13,11 +15,11 @@ const shelterSchema = z.object({
   phone: z.string().refine((value) => {
     const digits = value.replace(/\D/g, '').length
     return digits >= 10 && digits <= 11
-  }, {message: 'Numero deve ser entre 10 e 11 caracteres'}),
+  },{ message: 'Número deve conter entre 10 e 11 caracteres.'}),
   whatsApp: z.string().refine((value) => {
     const digits = value.replace(/\D/g, '').length
     return digits >= 10 && digits <= 11
-  }, {message: 'Numero deve ser entre 10 e 11 caracteres'}),
+  },{ message: 'Número deve conter entre 10 e 11 caracteres.'}),
 });
 
 type ShelterSchema = z.infer<typeof shelterSchema>;
@@ -29,8 +31,26 @@ export function Shelter() {
 
   const registerWithMask = useHookFormMask(register)
 
-  function submit({ name, email, phone, whatsApp }: ShelterSchema) {
-    console.log(name, email, phone, whatsApp);
+  async function submit({ name, email, phone, whatsApp }: ShelterSchema) {
+    const toastId = toast.loading('Salvando dados')
+
+    try {
+      await updateShelter({
+        name,
+        email,
+        phone: phone.replace(/\D/g, ''),
+        whatsApp: whatsApp.replace(/\D/g, ''),
+      })
+      toast.success('Dados salvos com sucesso', {
+        id: toastId,
+        closeButton: true,
+      })
+    } catch {
+      toast.error('Não foi possível salvar os dados', {
+        id: toastId,
+        closeButton: true,
+      })
+    }
   }
 
   return (
@@ -58,4 +78,3 @@ export function Shelter() {
     </Panel>
   );
 }
-
