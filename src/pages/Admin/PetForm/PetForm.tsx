@@ -8,6 +8,7 @@ import { Select } from '../../../components/common/Select'
 import { TextArea } from '../../../components/common/TextArea'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 enum FormStatus {
   ADD = 'add',
@@ -32,7 +33,9 @@ type PetSchema = z.infer<typeof petSchema>
 
 export function PetForm() {
   const { id } = useParams()
-  const { register, handleSubmit, formState } = useForm<PetSchema>()
+  const { register, handleSubmit, formState } = useForm<PetSchema>({
+    resolver: zodResolver(petSchema),
+  })
   const status = id ? FormStatus.EDIT : FormStatus.ADD
 
   function submit({ name, type, size, gender, bio }: PetSchema) {
@@ -62,6 +65,11 @@ export function PetForm() {
                 { value: 'gato', text: 'Gato' },
               ]}
             />
+            {formState.errors?.type && (
+              <p className={styles.formError}>
+                {formState.errors?.type.message}
+              </p>
+            )}
           </div>
           <div>
             <Select
@@ -72,6 +80,11 @@ export function PetForm() {
                 { value: 'macho', text: 'Macho' },
               ]}
             />
+            {formState.errors?.gender && (
+              <p className={styles.formError}>
+                {formState.errors?.gender.message}
+              </p>
+            )}
           </div>
           <div>
             <Select
@@ -83,9 +96,17 @@ export function PetForm() {
                 { value: 'grande', text: 'Grande' },
               ]}
             />
+            {formState.errors?.size && (
+              <p className={styles.formError}>
+                {formState.errors?.size.message}
+              </p>
+            )}
           </div>
         </div>
         <TextArea label="Sobre" {...register('bio')} />
+        {formState.errors?.bio && (
+          <p className={styles.formError}>{formState.errors?.bio.message}</p>
+        )}
         <div className={styles.buttons}>
           <Button type="submit">Salvar dados</Button>
         </div>
